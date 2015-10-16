@@ -1,0 +1,51 @@
+d3.selectAll('div').data([5, 30, 90]).style('height', function(d) { return d + 'px' })
+
+? what if they already have data and we just want to act on it ?
+seems confusing to enter data in the order of your divs like you have to know what you're mapping to
+
+d3.select('body').selectAll('div').data([5, 30, 90]).enter().append('div')
+.style('height', function(d) { return d + 'px' })
+
+? can this order be changed ? ie .data().style(...) then enter/append ?
+
+// all operations following .enter() will only effect the newly added nodes
+
+notes
+
+// if we hadn't selected body d3 wouldn't know where to insert the nodes
+// if we had started with selectAll('div') it would immediately 'create' the first div and assign it's data (5) and then add the missing 2 divs with enter but would only style the last two because the 1st div would have been considered already there when .style was invoked
+
+running this next
+d3.select('body').selectAll('div').data( ['pink', 'teal']).style('background-color', function(d) { return d; }) 
+will change our first two divs but leave the third on the page untouched
+
+adding .exit() returns that third element that didn't get an updated piece of data
+
+adding .remove() after .exit() removes it from the DOM
+
+
+// to make changes in an animated way as opposed to instantly we can add 
+.transition(...) property
+
+d3.select('body').selectAll('div').data( ['pink', 'teal'])
+.transition().duration(1500)
+.style('background-color', function(d) { return d; })
+.exit().remove();
+
+to check out in d3 doc:
+core
+scales
+svg
+time
+layouts
+geograhpy
+geometry
+behaviors
+
+// key 
+the default way data is assigned ('joined') to a node is by index. i.e. the first div gets the first piece of data in the array. 
+
+d3.select('body').selectAll('div').data([1, 2, 3]).style('color', 'red').enter().append().style('color', 'blue');
+
+does this depend on whether or not there was a div on the page already?
+first div is red , second two are blue
